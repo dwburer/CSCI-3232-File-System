@@ -18,7 +18,7 @@ public:
 	void status(string name);
 	void makeFile(string filename);
 	void removeFile(string filename);
-	void exit();
+	//void exit();
 	string getWorkingDirectory();
 };
 

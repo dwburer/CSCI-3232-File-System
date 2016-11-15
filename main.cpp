@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <map>
+#include <stdlib.h>
 #include "Directory.h"
 #include "Entity.h"
 #include "File.h"
@@ -28,6 +29,16 @@ void parseCommand(string c, FileSystem &f) {
 		f.changeDirectory(arg[1]);
 	//} else if(!cmd.compare("mkfs")) {
 		//f.makefilesystem();
+	} else if (!arg[0].compare("rmfile")) {
+		f.removeFile(arg[1]); 
+	} else if (!arg[0].compare("mkfile")) {
+		f.makeFile(arg[1]); 
+	} else if (!arg[0].compare("rmdir")) {
+		f.removeDirectory(arg[1]); 
+	} else if (!arg[0].compare("mkdir")) {
+		f.makeDirectory(arg[1]); 
+	} else if (!arg[0].compare("exit")) {
+		exit(0);
 	} else {
 		cout << c << ": command not found." << endl;
 	}
