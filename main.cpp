@@ -46,6 +46,8 @@ int main() {
 
 	FileSystem system(&root);
 
+	cout << "Welcome to CSCI Shell Prompt" << endl;
+
     while(running) {
     	cout << "prompt@CSCI-3232:" << system.getWorkingDirectory() << "$ ";
     	getline(cin, command);
