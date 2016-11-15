@@ -9,10 +9,22 @@
 using namespace std;
 
 void parseCommand(string c, FileSystem &f) {
-	if(!c.compare("ls")) {
+	string arg[2];
+	if(c.find(" ") != string::npos) {
+		arg[0] = (c.substr(0, c.find(" ")));
+	} else {
+		arg[0] = c;
+	}
+	if(c.length() > arg[0].length()) {
+		arg[1] = (c.substr((c.find(" ") + 1), c.length()));
+	}
+	if(!arg[0].compare("ls")) {
 		f.list();
-	} else if(!c.compare("cd")) {
-		f.changeDirectory("photos");
+	} else if(!arg[0].compare("cd")) {
+		cout << "|" << arg[1] << "|";
+		f.changeDirectory(arg[1]);
+	//} else if(!cmd.compare("mkfs")) {
+		//f.makefilesystem();
 	} else {
 		cout << c << ": command not found." << endl;
 	}
