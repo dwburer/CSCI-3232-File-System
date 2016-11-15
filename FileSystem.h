@@ -13,6 +13,12 @@ public:
 	FileSystem(Directory* d);
 	void list();
 	void changeDirectory(string dir);
+	void makeDirectory(string dir);
+	void removeDirectory(string dir);
+	void status(string name);
+	void makeFile(string filename);
+	void removeFile(string filename);
+	void exit();
 	string getWorkingDirectory();
 };
 

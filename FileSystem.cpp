@@ -31,6 +31,12 @@ void FileSystem::changeDirectory(string dir) {
 		cout << dir << ": no such file or directory" << endl;
 	}
 }
+void FileSystem::makeDirectory(string dir){};
+void FileSystem::removeDirectory(string dir){};
+void FileSystem::status(string name){};
+void FileSystem::makeFile(string filename){};
+void FileSystem::removeFile(string filename){};
+void FileSystem::exit(){};
 
 string FileSystem::getWorkingDirectory() {
 	string dir;
