@@ -8,6 +8,7 @@
 class FileSystem {
 protected:
 	Directory* currentDirectory;
+	Directory* root;
 public:
 	FileSystem(Directory* d);
 	void list();

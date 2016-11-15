@@ -10,14 +10,17 @@ using namespace std;
 
 void parseCommand(string c, FileSystem &f) {
 	string arg[2];
+
 	if(c.find(" ") != string::npos) {
 		arg[0] = (c.substr(0, c.find(" ")));
 	} else {
 		arg[0] = c;
 	}
+
 	if(c.length() > arg[0].length()) {
 		arg[1] = (c.substr((c.find(" ") + 1), c.length()));
 	}
+	
 	if(!arg[0].compare("ls")) {
 		f.list();
 	} else if(!arg[0].compare("cd")) {

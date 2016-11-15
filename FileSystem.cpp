@@ -9,7 +9,8 @@
 using namespace std;
 
 FileSystem::FileSystem (Directory* d) {
-	currentDirectory = d;
+	root = d;
+	currentDirectory = root;
 }
 
 void FileSystem::list() {
