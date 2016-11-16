@@ -25,10 +25,7 @@ void parseCommand(string c, FileSystem &f) {
 	if(!arg[0].compare("ls")) {
 		f.list();
 	} else if(!arg[0].compare("cd")) {
-		cout << "|" << arg[1] << "|";
 		f.changeDirectory(arg[1]);
-	//} else if(!cmd.compare("mkfs")) {
-		//f.makefilesystem();
 	} else if (!arg[0].compare("rmfile")) {
 		f.removeFile(arg[1]); 
 	} else if (!arg[0].compare("mkfile")) {
@@ -50,10 +47,10 @@ int main() {
 	string command;
 	
 	Directory root("/");
-	root.addChild(*(new File("apple")));
-	root.addChild(*(new File("slapple")));
-	root.addChild(*(new File("grapple")));
-	root.addChild(*(new Directory("photos")));
+	root.addChild(new File("apple"));
+	root.addChild(new File("slapple"));
+	root.addChild(new File("grapple"));
+	root.addChild(new Directory("photos"));
 
 	FileSystem system(&root);
 

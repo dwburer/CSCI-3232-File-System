@@ -10,15 +10,21 @@ Directory::Directory(string n) : Entity (n, true) {
 	hasParent = false;
 }
 
-void Directory::addChild(Entity e) {
-	children[e.getName()] = e;
+void Directory::addChild(Entity* e) {
+	children[e->getName()] = e;
+	e->setParent(this);
 }
 
-void Directory::setParent(Directory* d) {
+void Directory::setParent(Entity* e) {
 	hasParent = true;
-	parent = d;
+	parent = (Directory*) e;
 }
 
-string Directory::getParent() {
-	return parent->getName();
+bool Directory::contains(string file) {
+	map<string, Entity*>::iterator it = children.find(file);
+	return it != children.end();
+}
+
+Directory* Directory::getParent() {
+	return parent;
 }

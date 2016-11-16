@@ -13,4 +13,4 @@ Entity::Entity(string n, bool dir) {
 
 string Entity::getName() {
 	return name;
-} //add virtual functions?
+}

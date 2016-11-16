@@ -9,12 +9,13 @@ class Directory : public Entity {
 protected:
 	Directory* parent;
 public:
-	map <string, Entity> children;
+	map <string, Entity*> children;
 	bool hasParent;
 	Directory(string n);
-	void addChild(Entity e);
-	void setParent(Directory* d);
-	string getParent();
+	bool contains(string file);
+	void addChild(Entity* e);
+	void setParent(Entity* e);
+	Directory* getParent();
 };
 
 #endif

@@ -8,10 +8,11 @@ using namespace std;
 
 File::File(string n) : Entity(n, false) {}
 
-void File::setParent(Directory* d) {
-	parent = d;
-}
-
 string File::getParent() {
 	return parent->getName();
+}
+
+void File::setParent(Entity* e) {
+	hasParent = true;
+	parent = (Directory*) e;
 }

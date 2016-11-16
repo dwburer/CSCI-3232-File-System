@@ -10,8 +10,7 @@ protected:
 	Directory* parent;
 public:
 	File(string n);
-	~File();
-	void setParent(Directory* d);
+	void setParent(Entity* e);
 	string getParent();
 };
 

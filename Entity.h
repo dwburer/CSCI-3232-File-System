@@ -9,10 +9,12 @@ class Entity {
 protected:
 	string name;
 public:
+	bool hasParent;
+	bool isDirectory;
 	Entity();
 	Entity(string n, bool dir);
 	string getName();
-	bool isDirectory;
+	virtual void setParent(Entity* e)=0;
 };
 
 #endif

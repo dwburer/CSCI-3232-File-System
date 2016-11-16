@@ -15,48 +15,69 @@ FileSystem::FileSystem (Directory* d) {
 
 void FileSystem::list() {
 	cout << "Contents of " << currentDirectory->getName() <<":\n";
-	map<string, Entity>::iterator it;
+
+	map<string, Entity*>::iterator it;
+
 	for(it = currentDirectory->children.begin(); it != currentDirectory->children.end(); it++ ) {
 		cout << it->first << "   ";
 	}
+
 	cout << endl;
 }
 
 void FileSystem::changeDirectory(string dir) {
-	Entity* newDir = &(currentDirectory->children[dir]);
-	if(newDir->isDirectory) {
-		currentDirectory = (Directory*) newDir;
-		cout << "switching to " << currentDirectory->getName() << " at " << currentDirectory << endl;
+
+	if(!dir.compare("..")) {
+		cout << "has parent:" << currentDirectory->hasParent << endl;
+		if(currentDirectory->hasParent) {
+			currentDirectory = currentDirectory->getParent();
+		} else {
+			cout << dir << ": no such file or directory" << endl;
+		}
 	} else {
-		cout << dir << ": no such file or directory" << endl;
+		Entity* newDir = currentDirectory->children[dir];
+
+		if(newDir->isDirectory) {
+			currentDirectory = (Directory*) newDir;
+			cout << "switching to " << currentDirectory->getName() << " at " << currentDirectory << endl;
+		} else {
+			cout << dir << ": no such file or directory" << endl;
+		}
 	}
 }
-void FileSystem::makeDirectory(string dir){
-	currentDirectory->addChild(*(new Directory(dir)));
+
+void FileSystem::makeDirectory(string dir) {
+	currentDirectory->addChild(new Directory(dir));
 	cout << "adding directory " << dir << endl;
 }
-void FileSystem::removeDirectory(string dir){
-	map<string, Entity>::iterator it = currentDirectory->children.find(dir);
-	if(it != currentDirectory->children.end()){
+
+void FileSystem::removeDirectory(string dir) {
+	
+	if(currentDirectory->contains(dir)) {
 		cout << "found directory " << dir << " deleting" << endl;
 		currentDirectory->children.erase(dir);
 	} else {
-		cout << "directory not found" << endl;
+		cout << dir << ": directory not found" << endl;
 	}
 }
-void FileSystem::status(string name){}
-void FileSystem::makeFile(string filename){
+
+void FileSystem::status(string name) {}
+
+void FileSystem::makeFile(string filename) {
 	cout << currentDirectory->getName() << endl;
-	currentDirectory->addChild(*(new File(filename)));
+
+	currentDirectory->addChild(new File(filename));
+
 	cout << "adding file" << filename << endl;
 }
-void FileSystem::removeFile(string filename){
-	map<string, Entity>::iterator it = currentDirectory->children.find(filename);
-	if(it != currentDirectory->children.end()){
+
+void FileSystem::removeFile(string filename) {
+
+	if(currentDirectory->contains(filename)) {
 		cout << "found file " << filename << " deleting" << endl;
 		currentDirectory->children.erase(filename);
 	} else {
-		cout << "file not found" << endl;
+		cout << filename << ": file not found" << endl;
 	}
 }
 
