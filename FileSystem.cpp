@@ -25,6 +25,13 @@ void FileSystem::list() {
 	cout << endl;
 }
 
+void FileSystem::makeFileSystem(){
+	Directory root("/");
+	FileSystem system(&root);
+	currentDirectory->flushDirectory();
+	cout << "You have created a new file system " << endl;
+}
+
 void FileSystem::changeDirectory(string dir) {
 
 	if(!dir.compare("..")) {
@@ -72,7 +79,7 @@ void FileSystem::makeFile(string filename) {
 
 	currentDirectory->addChild(new File(filename));
 
-	cout << "adding file" << filename << endl;
+	cout << "adding file " << filename << endl;
 }
 
 void FileSystem::removeFile(string filename) {

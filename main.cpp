@@ -21,8 +21,9 @@ void parseCommand(string c, FileSystem &f) {
 	if(c.length() > arg[0].length()) {
 		arg[1] = (c.substr((c.find(" ") + 1), c.length()));
 	}
-	
-	if(!arg[0].compare("ls")) {
+	if(!arg[0].compare("mkfs")) {
+		f.makeFileSystem();
+	} else if(!arg[0].compare("ls")) {
 		f.list();
 	} else if(!arg[0].compare("cd")) {
 		if(!arg[1].compare("0")){

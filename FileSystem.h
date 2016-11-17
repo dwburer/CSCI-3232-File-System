@@ -11,6 +11,7 @@ protected:
 	Directory* root;
 public:
 	FileSystem(Directory* d);
+	void makeFileSystem();
 	void list();
 	void changeDirectory(string dir);
 	void makeDirectory(string dir);

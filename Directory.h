@@ -15,6 +15,7 @@ public:
 	bool contains(string file);
 	void addChild(Entity* e);
 	void setParent(Entity* e);
+	void flushDirectory();
 	Directory* getParent();
 };
 

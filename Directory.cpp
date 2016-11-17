@@ -19,6 +19,9 @@ void Directory::setParent(Entity* e) {
 	hasParent = true;
 	parent = (Directory*) e;
 }
+void Directory::flushDirectory() {
+	children.clear();
+}
 
 bool Directory::contains(string file) {
 	map<string, Entity*>::iterator it = children.find(file);
