@@ -19,7 +19,10 @@ void FileSystem::list() {
 	map<string, Entity*>::iterator it;
 
 	for(it = currentDirectory->children.begin(); it != currentDirectory->children.end(); it++ ) {
-		cout << it->first << "   ";
+		if(it->second->isDirectory)
+			cout << "[" + it->first + "]" << "   ";
+		else
+			cout << it->first << "   ";
 	}
 
 	cout << endl;
