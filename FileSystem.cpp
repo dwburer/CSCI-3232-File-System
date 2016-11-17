@@ -54,8 +54,12 @@ void FileSystem::makeDirectory(string dir) {
 void FileSystem::removeDirectory(string dir) {
 	
 	if(currentDirectory->contains(dir)) {
-		cout << "found directory " << dir << " deleting" << endl;
-		currentDirectory->children.erase(dir);
+		if(currentDirectory->children[dir]->isDirectory) {
+			cout << "found directory " << dir << " deleting" << endl;
+			currentDirectory->children.erase(dir);
+		} else {
+			cout << "error: \"" << dir << "\" is a file, not a directory." << endl;
+		}
 	} else {
 		cout << dir << ": directory not found" << endl;
 	}
@@ -74,8 +78,12 @@ void FileSystem::makeFile(string filename) {
 void FileSystem::removeFile(string filename) {
 
 	if(currentDirectory->contains(filename)) {
-		cout << "found file " << filename << " deleting" << endl;
-		currentDirectory->children.erase(filename);
+		if(!currentDirectory->children[filename]->isDirectory) {
+			cout << "found file " << filename << " deleting" << endl;
+			currentDirectory->children.erase(filename);
+		} else {
+			cout << "error: \"" << filename << "\" is a directory, not a file." << endl;
+		}
 	} else {
 		cout << filename << ": file not found" << endl;
 	}
