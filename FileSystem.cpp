@@ -19,7 +19,10 @@ void FileSystem::list() {
 	map<string, Entity*>::iterator it;
 
 	for(it = currentDirectory->children.begin(); it != currentDirectory->children.end(); it++ ) {
-		cout << it->first << "   ";
+		if(it->second->isDirectory)
+			cout << "[" + it->first + "]" << "   ";
+		else
+			cout << it->first << "   ";
 	}
 
 	cout << endl;
@@ -62,8 +65,13 @@ void FileSystem::removeDirectory(string dir) {
 	
 	if(currentDirectory->contains(dir)) {
 		if(currentDirectory->children[dir]->isDirectory) {
-			cout << "found directory " << dir << " deleting" << endl;
-			currentDirectory->children.erase(dir);
+			if(currentDirectory->children.size() == 0) {
+				cout << "found directory " << dir << " deleting" << endl;
+				delete currentDirectory->children[dir];
+				currentDirectory->children.erase(dir);
+			} else {
+				cout << "error: \"" << dir << "\" is not empty" << endl;
+			}
 		} else {
 			cout << "error: \"" << dir << "\" is a file, not a directory" << endl;
 		}
@@ -87,6 +95,7 @@ void FileSystem::removeFile(string filename) {
 	if(currentDirectory->contains(filename)) {
 		if(!currentDirectory->children[filename]->isDirectory) {
 			cout << "found file " << filename << " deleting" << endl;
+			delete currentDirectory->children[filename];
 			currentDirectory->children.erase(filename);
 		} else {
 			cout << "error: \"" << filename << "\" is a directory, not a file" << endl;

@@ -6,9 +6,7 @@
 
 using namespace std;
 
-Directory::Directory(string n) : Entity (n, true) {
-	hasParent = false;
-}
+Directory::Directory(string n) : Entity (n, true), hasParent(false) {}
 
 void Directory::addChild(Entity* e) {
 	children[e->getName()] = e;
