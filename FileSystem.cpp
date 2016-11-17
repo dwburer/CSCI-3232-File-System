@@ -28,11 +28,6 @@ void FileSystem::list() {
 	cout << endl;
 }
 
-/**
- * Makes file system
- *
- *
- */
 void FileSystem::makeFileSystem() {
 	root->flushDirectory();
 	currentDirectory = root;
