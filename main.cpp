@@ -10,6 +10,7 @@
 using namespace std;
 
 void parseCommand(string c, FileSystem &f) {
+
 	string arg[2];
 	arg[1] = "0";
 	if(c.find(" ") != string::npos) {
@@ -23,6 +24,9 @@ void parseCommand(string c, FileSystem &f) {
 	}
 	if(!arg[0].compare("mkfs")) {
 		f.makeFileSystem();
+	} else if(!f.isFormatted) {
+		cout << "error: FileSystem must be formatted before use" << endl;
+		return;
 	} else if(!arg[0].compare("ls")) {
 		f.list();
 	} else if(!arg[0].compare("cd")) {
@@ -39,6 +43,8 @@ void parseCommand(string c, FileSystem &f) {
 		f.removeDirectory(arg[1]); 
 	} else if (!arg[0].compare("mkdir")) {
 		f.makeDirectory(arg[1]); 
+	} else if (!arg[0].compare("stat")) {
+		f.stat(arg[1]); 
 	} else if (!arg[0].compare("exit")) {
 		exit(0);
 	} else {

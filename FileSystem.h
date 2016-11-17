@@ -10,6 +10,7 @@ protected:
 	Directory* currentDirectory;
 	Directory* root;
 public:
+	bool isFormatted;
 	FileSystem(Directory* d);
 	void makeFileSystem();
 	void list();
@@ -19,7 +20,7 @@ public:
 	void status(string name);
 	void makeFile(string filename);
 	void removeFile(string filename);
-	//void exit();
+	void stat(string filename);
 	string getWorkingDirectory();
 };
 

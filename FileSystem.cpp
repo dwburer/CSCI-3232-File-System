@@ -8,13 +8,13 @@
 
 using namespace std;
 
-FileSystem::FileSystem (Directory* d) {
+FileSystem::FileSystem (Directory* d) : isFormatted(false) {
 	root = d;
 	currentDirectory = root;
 }
 
 void FileSystem::list() {
-	cout << "Contents of " << currentDirectory->getName() <<":\n";
+	cout << currentDirectory->children.size() << " Contents of " << currentDirectory->getName() <<":\n";
 
 	map<string, Entity*>::iterator it;
 
@@ -28,10 +28,10 @@ void FileSystem::list() {
 	cout << endl;
 }
 
-void FileSystem::makeFileSystem(){
-	Directory root("/");
-	FileSystem system(&root);
-	currentDirectory->flushDirectory();
+void FileSystem::makeFileSystem() {
+	root->flushDirectory();
+	currentDirectory = root;
+	isFormatted = true;
 	cout << "You have created a new file system " << endl;
 }
 
@@ -47,7 +47,7 @@ void FileSystem::changeDirectory(string dir) {
 
 		if(newDir->isDirectory) {
 			currentDirectory = (Directory*) newDir;
-			cout << "switching to " << currentDirectory->getName() << " at " << currentDirectory << endl;
+			cout << "current directory is now " << currentDirectory->getName() << endl;
 		} else {
 			cout << dir << ": Is not a directory" << endl;
 		}
@@ -65,7 +65,10 @@ void FileSystem::removeDirectory(string dir) {
 	
 	if(currentDirectory->contains(dir)) {
 		if(currentDirectory->children[dir]->isDirectory) {
-			if(currentDirectory->children.size() == 0) {
+
+			Directory* toDelete = (Directory*)(currentDirectory->children[dir]);
+
+			if(toDelete->children.size() == 0) {
 				cout << "found directory " << dir << " deleting" << endl;
 				delete currentDirectory->children[dir];
 				currentDirectory->children.erase(dir);
@@ -83,11 +86,11 @@ void FileSystem::removeDirectory(string dir) {
 void FileSystem::status(string name) {}
 
 void FileSystem::makeFile(string filename) {
-	cout << currentDirectory->getName() << endl;
+	File* tmp = new File(filename);
 
-	currentDirectory->addChild(new File(filename));
+	currentDirectory->addChild(tmp);
 
-	cout << "adding file " << filename << endl;
+	cout << "file " << filename << " created at " << tmp->getTime();
 }
 
 void FileSystem::removeFile(string filename) {
@@ -103,6 +106,10 @@ void FileSystem::removeFile(string filename) {
 	} else {
 		cout << filename << ": no such file found" << endl;
 	}
+}
+
+void FileSystem::stat(string filename) {
+	cout << "file " << currentDirectory->children[filename]->getName() << " created " << currentDirectory->children[filename]->getTime();
 }
 
 string FileSystem::getWorkingDirectory() {
