@@ -64,8 +64,12 @@ void FileSystem::removeDirectory(string dir) {
 	
 	if(currentDirectory->contains(dir)) {
 		if(currentDirectory->children[dir]->isDirectory) {
-			cout << "found directory " << dir << " deleting" << endl;
-			currentDirectory->children.erase(dir);
+			if(currentDirectory->children.size() == 0) {
+				cout << "found directory " << dir << " deleting" << endl;
+				currentDirectory->children.erase(dir);
+			} else {
+				cout << "error: \"" << dir << "\" is not empty" << endl;
+			}
 		} else {
 			cout << "error: \"" << dir << "\" is a file, not a directory" << endl;
 		}
