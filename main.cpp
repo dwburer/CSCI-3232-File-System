@@ -11,7 +11,7 @@ using namespace std;
 
 void parseCommand(string c, FileSystem &f) {
 	string arg[2];
-
+	arg[1] = "0";
 	if(c.find(" ") != string::npos) {
 		arg[0] = (c.substr(0, c.find(" ")));
 	} else {
@@ -25,7 +25,11 @@ void parseCommand(string c, FileSystem &f) {
 	if(!arg[0].compare("ls")) {
 		f.list();
 	} else if(!arg[0].compare("cd")) {
+		if(!arg[1].compare("0")){
+			cout << "Please specify destination" << endl;
+		} else {
 		f.changeDirectory(arg[1]);
+		}
 	} else if (!arg[0].compare("rmfile")) {
 		f.removeFile(arg[1]); 
 	} else if (!arg[0].compare("mkfile")) {
