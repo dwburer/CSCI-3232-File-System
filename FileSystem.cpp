@@ -28,6 +28,11 @@ void FileSystem::list() {
 	cout << endl;
 }
 
+/**
+ * Makes file system
+ *
+ *
+ */
 void FileSystem::makeFileSystem() {
 	root->flushDirectory();
 	currentDirectory = root;
@@ -82,8 +87,6 @@ void FileSystem::removeDirectory(string dir) {
 		cout << dir << ": no such directory found" << endl;
 	}
 }
-
-void FileSystem::status(string name) {}
 
 void FileSystem::makeFile(string filename) {
 	File* tmp = new File(filename);
