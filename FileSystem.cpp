@@ -33,22 +33,23 @@ void FileSystem::makeFileSystem(){
 }
 
 void FileSystem::changeDirectory(string dir) {
-
 	if(!dir.compare("..")) {
 		if(currentDirectory->hasParent) {
 			currentDirectory = currentDirectory->getParent();
 		} else {
-			cout << dir << ": no such file or directory" << endl;
+			cout << dir << ": Invalid directory" << endl;
 		}
-	} else {
+	} else if(currentDirectory->contains(dir)){
 		Entity* newDir = currentDirectory->children[dir];
 
 		if(newDir->isDirectory) {
 			currentDirectory = (Directory*) newDir;
 			cout << "switching to " << currentDirectory->getName() << " at " << currentDirectory << endl;
 		} else {
-			cout << dir << ": no such file or directory" << endl;
+			cout << dir << ": Is not a directory" << endl;
 		}
+	} else {
+		cout << "The requested destination does not exist " << endl;
 	}
 }
 
@@ -67,7 +68,7 @@ void FileSystem::removeDirectory(string dir) {
 			cout << "error: \"" << dir << "\" is a file, not a directory" << endl;
 		}
 	} else {
-		cout << dir << ": directory not found" << endl;
+		cout << dir << ": no such directory found" << endl;
 	}
 }
 
@@ -91,7 +92,7 @@ void FileSystem::removeFile(string filename) {
 			cout << "error: \"" << filename << "\" is a directory, not a file" << endl;
 		}
 	} else {
-		cout << filename << ": file not found" << endl;
+		cout << filename << ": no such file found" << endl;
 	}
 }
 
