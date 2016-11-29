@@ -1,4 +1,5 @@
 #include <iostream>
+#include <vector>
 #include <string>
 #include <map>
 #include <stdlib.h>
@@ -10,15 +11,17 @@
 using namespace std;
 
 void parseCommand(string c, FileSystem &f) {
-
 	string arg[2];
+	vector<string> dirArgs;
+	size_t pos = 0;
+	string delimiter = "/";
+	vector<string>::iterator it2;
 	arg[1] = "0";
 	if(c.find(" ") != string::npos) {
 		arg[0] = (c.substr(0, c.find(" ")));
 	} else {
 		arg[0] = c;
 	}
-
 	if(c.length() > arg[0].length()) {
 		arg[1] = (c.substr((c.find(" ") + 1), c.length()));
 	}
@@ -33,7 +36,21 @@ void parseCommand(string c, FileSystem &f) {
 		if(!arg[1].compare("0")){
 			cout << "Please specify destination" << endl;
 		} else {
-		f.changeDirectory(arg[1]);
+			if(arg[1].find("/") != string::npos) {
+				string s = arg[1];
+				while ((pos = s.find(delimiter)) != string::npos){
+					dirArgs.insert(it2, s.substr(0, pos));
+					s.erase(0, pos + delimiter.length());
+					cout<<s<<endl;
+					++it2;
+				}
+				for(vector<string>::iterator it = dirArgs.begin() ; it != dirArgs.end(); ++it){
+					f.changeDirectory(*it);
+				}
+				f.changeDirectory(s);
+     		} else{
+     			f.changeDirectory(arg[1]);
+     		}
 		}
 	} else if (!arg[0].compare("rmfile")) {
 		f.removeFile(arg[1]); 
@@ -51,7 +68,6 @@ void parseCommand(string c, FileSystem &f) {
 		cout << c << ": command not found." << endl;
 	}
 }
-
 int main() {
 
 	bool running = true;
