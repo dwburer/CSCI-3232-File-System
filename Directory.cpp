@@ -22,8 +22,7 @@ void Directory::flushDirectory() {
 }
 
 bool Directory::contains(string file) {
-	map<string, Entity*>::iterator it = children.find(file);
-	return it != children.end();
+	return children.count(file) != 0;
 }
 
 Directory* Directory::getParent() {

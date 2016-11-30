@@ -11,20 +11,21 @@
 using namespace std;
 
 void parseCommand(string c, FileSystem &f) {
-	string arg[2];
 	vector<string> dirArgs;
-	size_t pos = 0;
-	string delimiter = "/";
-	vector<string>::iterator it2;
+	string arg[2];
 	arg[1] = "0";
+	size_t pos = 0;
+
 	if(c.find(" ") != string::npos) {
 		arg[0] = (c.substr(0, c.find(" ")));
 	} else {
 		arg[0] = c;
 	}
+
 	if(c.length() > arg[0].length()) {
 		arg[1] = (c.substr((c.find(" ") + 1), c.length()));
 	}
+
 	if(!arg[0].compare("mkfs")) {
 		f.makeFileSystem();
 	} else if(!f.isFormatted) {
@@ -36,21 +37,49 @@ void parseCommand(string c, FileSystem &f) {
 		if(!arg[1].compare("0")){
 			cout << "Please specify destination" << endl;
 		} else {
+
+			// Splitting path into individual commands
 			if(arg[1].find("/") != string::npos) {
+
+				Directory* validate;
+				bool valid = true;
+				string delimiter = "/";
 				string s = arg[1];
-				while ((pos = s.find(delimiter)) != string::npos){
-					dirArgs.insert(it2, s.substr(0, pos));
+				vector<string>::iterator path_iterator;
+
+				while ((pos = s.find(delimiter)) != string::npos) {
+					string newDir = s.substr(0, pos);
+					dirArgs.insert(path_iterator, s.substr(0, pos));
 					s.erase(0, pos + delimiter.length());
-					cout<<s<<endl;
-					++it2;
+					++path_iterator;
 				}
-				for(vector<string>::iterator it = dirArgs.begin() ; it != dirArgs.end(); ++it){
-					f.changeDirectory(*it);
+
+				validate = f.getCurrentDirectory();
+
+				for(vector<string>::iterator it = dirArgs.begin(); it != dirArgs.end(); it++) {
+					
+					cout << "Checking if " << validate->getName() << " contains " << *it << endl;
+
+					if (!validate->contains(*it)) {
+						valid = false;
+					} else {
+						validate = (Directory*)validate->children[*it];
+					}
 				}
-				f.changeDirectory(s);
-     		} else{
+
+				if(valid) {
+					for(vector<string>::iterator it = dirArgs.begin(); it != dirArgs.end(); ++it) {
+						cout << *it << " ";
+						f.changeDirectory(*it);
+					}
+
+					f.changeDirectory(s);
+				}
+
+     		} else {
      			f.changeDirectory(arg[1]);
      		}
+
 		}
 	} else if (!arg[0].compare("rmfile")) {
 		f.removeFile(arg[1]); 
@@ -68,25 +97,21 @@ void parseCommand(string c, FileSystem &f) {
 		cout << c << ": command not found." << endl;
 	}
 }
+
 int main() {
 
 	bool running = true;
 	string command;
 	
 	Directory root("/");
-	root.addChild(new File("apple"));
-	root.addChild(new File("slapple"));
-	root.addChild(new File("grapple"));
-	root.addChild(new Directory("photos"));
 
 	FileSystem system(&root);
 
-	cout << "Welcome to CSCI Shell Prompt" << endl;
+	cout << "Welcome to CSCI Shell Prompt!" << endl;
 
     while(running) {
     	cout << "prompt@CSCI-3232:" << system.getWorkingDirectory() << "$ ";
     	getline(cin, command);
     	parseCommand(command, system);
-    }
-    
+    }    
 }

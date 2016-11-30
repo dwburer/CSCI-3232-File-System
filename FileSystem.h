@@ -14,6 +14,7 @@ public:
 	FileSystem(Directory* d);
 	void makeFileSystem();
 	void list();
+	Directory* getCurrentDirectory();
 	void changeDirectory(string dir);
 	void makeDirectory(string dir);
 	void removeDirectory(string dir);
