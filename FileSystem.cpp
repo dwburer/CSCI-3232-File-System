@@ -8,13 +8,15 @@
 
 using namespace std;
 
+// FileSystem constructor
 FileSystem::FileSystem (Directory* d) : isFormatted(false) {
 	root = d;
 	currentDirectory = root;
 }
 
+// List contents of current directory
 void FileSystem::list() {
-	cout << currentDirectory->children.size() << " Contents of " << currentDirectory->getName() <<":\n";
+	cout << "Contents of " << currentDirectory->getName() <<":\n";
 
 	map<string, Entity*>::iterator it;
 
@@ -28,17 +30,20 @@ void FileSystem::list() {
 	cout << endl;
 }
 
+// Get current directory
 Directory* FileSystem::getCurrentDirectory() {
 	return currentDirectory;
 }
 
+// Make/format FileSystem for use
 void FileSystem::makeFileSystem() {
 	root->flushDirectory();
 	currentDirectory = root;
 	isFormatted = true;
-	cout << "You have created a new file system " << endl;
+	cout << "New file system created" << endl;
 }
 
+// Change current directory to parent or child directory
 void FileSystem::changeDirectory(string dir) {
 	if(!dir.compare("..")) {
 		if(currentDirectory->hasParent) {
@@ -51,7 +56,7 @@ void FileSystem::changeDirectory(string dir) {
 
 		if(newDir->isDirectory) {
 			currentDirectory = (Directory*) newDir;
-			cout << "current directory is now " << currentDirectory->getName() << endl;
+			cout << "Current directory is now " << currentDirectory->getName() << endl;
 		} else {
 			cout << dir << ": Is not a directory" << endl;
 		}
@@ -60,11 +65,18 @@ void FileSystem::changeDirectory(string dir) {
 	}
 }
 
+// Make a new directory
 void FileSystem::makeDirectory(string dir) {
-	currentDirectory->addChild(new Directory(dir));
-	cout << "adding directory " << dir << endl;
+	if(!currentDirectory->contains(dir)) {
+		Directory* tmp = new Directory(dir);
+		currentDirectory->addChild(tmp);
+		cout << "Directory " << dir << " created at " << tmp->getTime();
+	} else {
+		cout << "Error: directory " << dir << " already exists" << endl;
+	}
 }
 
+// Remove an existing directory
 void FileSystem::removeDirectory(string dir) {
 	
 	if(currentDirectory->contains(dir)) {
@@ -73,47 +85,57 @@ void FileSystem::removeDirectory(string dir) {
 			Directory* toDelete = (Directory*)(currentDirectory->children[dir]);
 
 			if(toDelete->children.size() == 0) {
-				cout << "found directory " << dir << " deleting" << endl;
+				cout << "Deleting directory " << dir << endl;
 				delete currentDirectory->children[dir];
 				currentDirectory->children.erase(dir);
 			} else {
-				cout << "error: \"" << dir << "\" is not empty" << endl;
+				cout << "Error: \"" << dir << "\" is not empty" << endl;
 			}
 		} else {
-			cout << "error: \"" << dir << "\" is a file, not a directory" << endl;
+			cout << "Error: \"" << dir << "\" is a file, not a directory" << endl;
 		}
 	} else {
-		cout << dir << ": no such directory found" << endl;
+		cout << dir << ": No such directory found" << endl;
 	}
 }
 
+// Make a new file
 void FileSystem::makeFile(string filename) {
-	File* tmp = new File(filename);
-
-	currentDirectory->addChild(tmp);
-
-	cout << "file " << filename << " created at " << tmp->getTime();
+	if(!currentDirectory->contains(filename)) {
+		File* tmp = new File(filename);
+		currentDirectory->addChild(tmp);
+		cout << "File " << filename << " created at " << tmp->getTime();
+	} else {
+		cout << "Error: file " << filename << " already exists" << endl;
+	}
 }
 
+// Remove an existing file
 void FileSystem::removeFile(string filename) {
 
 	if(currentDirectory->contains(filename)) {
 		if(!currentDirectory->children[filename]->isDirectory) {
-			cout << "found file " << filename << " deleting" << endl;
+			cout << "Deleting file " << filename << endl;
 			delete currentDirectory->children[filename];
 			currentDirectory->children.erase(filename);
 		} else {
-			cout << "error: \"" << filename << "\" is a directory, not a file" << endl;
+			cout << "Error: " << filename << " is a directory, not a file" << endl;
 		}
 	} else {
-		cout << filename << ": no such file found" << endl;
+		cout << filename << ": No such file found" << endl;
 	}
 }
 
+// Print file status information
 void FileSystem::stat(string filename) {
-	cout << "file " << currentDirectory->children[filename]->getName() << " created " << currentDirectory->children[filename]->getTime();
+	if(currentDirectory->contains(filename)) {
+		cout << "File " << currentDirectory->children[filename]->getName() << " created " << currentDirectory->children[filename]->getTime();
+	} else {
+		cout << filename << ": No such file found" << endl;
+	}
 }
 
+// Get absolute path to current directory
 string FileSystem::getWorkingDirectory() {
 	string dir = currentDirectory->getName();
 	Directory* backtrack = currentDirectory;

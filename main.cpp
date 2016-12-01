@@ -1,3 +1,6 @@
+// CSCI-3232-A File System Emulator project
+// Daniel Burer, James Gormley, Katelyn Greer
+
 #include <iostream>
 #include <vector>
 #include <string>
@@ -10,10 +13,11 @@
 
 using namespace std;
 
+// Parses command and calls approproate FileSystem functions
 void parseCommand(string c, FileSystem &f) {
 	vector<string> dirArgs;
 	string arg[2];
-	arg[1] = "0";
+	arg[1] = "/";
 	size_t pos = 0;
 
 	if(c.find(" ") != string::npos) {
@@ -29,69 +33,48 @@ void parseCommand(string c, FileSystem &f) {
 	if(!arg[0].compare("mkfs")) {
 		f.makeFileSystem();
 	} else if(!f.isFormatted) {
-		cout << "error: FileSystem must be formatted before use" << endl;
+		cout << "Error: FileSystem must be formatted before use" << endl;
 		return;
 	} else if(!arg[0].compare("ls")) {
 		f.list();
 	} else if(!arg[0].compare("cd")) {
-		if(!arg[1].compare("0")){
-			cout << "Please specify destination" << endl;
+		if(!arg[1].compare("/")) {
+			cout << "Usage: cd <directory>" << endl;
 		} else {
-
-			// Splitting path into individual commands
-			if(arg[1].find("/") != string::npos) {
-
-				Directory* validate;
-				bool valid = true;
-				string delimiter = "/";
-				string s = arg[1];
-				vector<string>::iterator path_iterator;
-
-				while ((pos = s.find(delimiter)) != string::npos) {
-					string newDir = s.substr(0, pos);
-					dirArgs.insert(path_iterator, s.substr(0, pos));
-					s.erase(0, pos + delimiter.length());
-					++path_iterator;
-				}
-
-				validate = f.getCurrentDirectory();
-
-				for(vector<string>::iterator it = dirArgs.begin(); it != dirArgs.end(); it++) {
-					
-					cout << "Checking if " << validate->getName() << " contains " << *it << endl;
-
-					if (!validate->contains(*it)) {
-						valid = false;
-					} else {
-						validate = (Directory*)validate->children[*it];
-					}
-				}
-
-				if(valid) {
-					for(vector<string>::iterator it = dirArgs.begin(); it != dirArgs.end(); ++it) {
-						cout << *it << " ";
-						f.changeDirectory(*it);
-					}
-
-					f.changeDirectory(s);
-				}
-
-     		} else {
-     			f.changeDirectory(arg[1]);
-     		}
-
+ 			f.changeDirectory(arg[1]);
 		}
 	} else if (!arg[0].compare("rmfile")) {
-		f.removeFile(arg[1]); 
+		if(!arg[1].compare("/")) {
+			cout << "Usage: rmfile <file>" << endl;
+		} else {
+			f.removeFile(arg[1]); 
+		}
 	} else if (!arg[0].compare("mkfile")) {
-		f.makeFile(arg[1]); 
+		if(!arg[1].compare("/")) {
+			cout << "Usage: mkfile <file>" << endl;
+		} else {
+			f.makeFile(arg[1]); 
+		}
 	} else if (!arg[0].compare("rmdir")) {
-		f.removeDirectory(arg[1]); 
+		if(!arg[1].compare("/")) {
+			cout << "Usage: rmdir <directory>" << endl;
+		} else {
+			f.removeDirectory(arg[1]);
+		}
 	} else if (!arg[0].compare("mkdir")) {
-		f.makeDirectory(arg[1]); 
+		if(!arg[1].compare("/")) {
+			cout << "Usage: rmdir <directory>" << endl;
+		} else {
+			f.makeDirectory(arg[1]);
+		}
 	} else if (!arg[0].compare("stat")) {
-		f.stat(arg[1]); 
+		if(!arg[1].compare("/")){
+			cout << "Usage: stat <file|directory>" << endl;
+		} else {
+			f.stat(arg[1]);
+		}
 	} else if (!arg[0].compare("exit")) {
+		cout << "Exiting..." << endl;
 		exit(0);
 	} else {
 		cout << c << ": command not found." << endl;
@@ -104,7 +87,6 @@ int main() {
 	string command;
 	
 	Directory root("/");
-
 	FileSystem system(&root);
 
 	cout << "Welcome to CSCI Shell Prompt!" << endl;
